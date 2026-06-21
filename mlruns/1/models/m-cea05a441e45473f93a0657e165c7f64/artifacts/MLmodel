@@ -1,0 +1,23 @@
+artifact_path: "file:C:/Users/\uAE40\uC601\uD604/Desktop/CardioCare/mlruns/1/models/m-cea05a441e45473f93a0657e165c7f64/artifacts"
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.11
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.9.0
+    skops_trusted_types: null
+mlflow_version: 3.14.0
+model_id: m-cea05a441e45473f93a0657e165c7f64
+model_size_bytes: 757691
+model_uuid: m-cea05a441e45473f93a0657e165c7f64
+prompts: null
+run_id: c7e9be12a3c44b8f8793f3066b4edcf6
+utc_time_created: '2026-06-21 19:39:35.420546'
