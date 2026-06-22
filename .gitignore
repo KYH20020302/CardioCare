@@ -12,7 +12,6 @@ confusion_matrix_*.csv
 
 # Local databases / generated model files
 mlflow.db
-best_model.pkl
 
 # Environment
 .venv/
