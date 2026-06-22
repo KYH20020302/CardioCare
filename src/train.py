@@ -45,6 +45,7 @@ df = pd.read_csv(
 
 df["target"] = (df["target"] > 0).astype(int)
 
+# 데이터 분할 
 X = df.drop("target", axis=1)
 y = df["target"]
 
@@ -60,8 +61,10 @@ X_train, X_test, y_train, y_test = train_test_split(
 print("Train shape:", X_train.shape)
 print("Test shape:", X_test.shape)
 
-
+#모델에 맞는 스케일링 적용
 preprocessor = create_preprocessor()
+
+# 특성 선택 수행
 feature_selector = create_feature_selector()
 
 feature_selection_pipeline = Pipeline([
@@ -82,7 +85,7 @@ print(selected_features.tolist())
 mlflow.set_tracking_uri(f"sqlite:///{MLFLOW_DB_PATH.as_posix()}")
 mlflow.set_experiment("CardioCare_HeartDisease")
 
-
+# 서로 다른 계열의 모델 학습, 비교(Logistic Regression, SVC, Random Forest)
 models = {
     "LogisticRegression": LogisticRegression(
         max_iter=1000,
@@ -102,6 +105,7 @@ for model_name, model in models.items():
 
     pipeline = create_model_pipeline(model)
 
+    # 모든 실행에 대해 MLflow로 파라미터, 지표 일체, 학습된 모델 아티팩트, 모델 계열 태그 기록
     with mlflow.start_run(run_name=model_name):
 
         pipeline.fit(X_train, y_train)
@@ -175,7 +179,7 @@ print(results_df[[
     "f1"
 ]])
 
-
+# 5-fold 교차 검증
 candidate_pipeline = create_model_pipeline(
     RandomForestClassifier(random_state=RANDOM_STATE)
 )
@@ -193,7 +197,7 @@ print("CV Scores:", cv_scores)
 print("Mean Balanced Accuracy:", cv_scores.mean())
 print("Std Balanced Accuracy:", cv_scores.std())
 
-
+# 하이퍼 파라미터 탐색(그리드)
 param_grid = {
     "model__n_estimators": [50, 100, 200],
     "model__max_depth": [None, 3, 5, 10],
@@ -275,13 +279,3 @@ with mlflow.start_run(run_name="RandomForest_GridSearch"):
         serialization_format="cloudpickle"
     )
 
-
-print("\nFinal Model Selection")
-print(
-    "RandomForest was selected as the main candidate because it showed "
-    "the highest balanced accuracy and F1-score among the baseline models. "
-    "However, Logistic Regression showed the highest recall, which is clinically "
-    "important because false negatives mean predicting a heart disease patient "
-    "as normal. Therefore, the final decision should consider both overall "
-    "performance and recall."
-)

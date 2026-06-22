@@ -7,7 +7,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 RANDOM_STATE = 42
 
-
+#모델에 맞는 스케일링 적용
 def create_preprocessor():
     return Pipeline([
         ("imputer", SimpleImputer(strategy="median")),

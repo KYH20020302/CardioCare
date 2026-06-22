@@ -82,7 +82,8 @@ class TestCardioCarePipeline(unittest.TestCase):
         )
 
         self.model.fit(self.X, self.y)
-
+    
+    #예측 결과의 shape과 입력 shape 일치하는지 확인
     def test_prediction_shape_matches_input_shape(self):
         preds = self.model.predict(self.X)
 
@@ -90,7 +91,7 @@ class TestCardioCarePipeline(unittest.TestCase):
             preds.shape[0],
             self.X.shape[0]
         )
-
+    #예측 확률이 [0,1] 범위 내에 있고 행마다 합이 약 1인지 확인
     def test_prediction_probability_range_and_sum(self):
         probs = self.model.predict_proba(self.X)
 
@@ -101,14 +102,14 @@ class TestCardioCarePipeline(unittest.TestCase):
 
         for value in row_sums:
             self.assertAlmostEqual(value, 1.0, places=5)
-
+    #임상적으로 범위가 정해진 특성(chol)에 대한 입력값 범위 검증
     def test_chol_input_range(self):
         chol_values = self.X["chol"]
 
         self.assertTrue(
             ((chol_values >= 0) & (chol_values <= 600)).all()
         )
-
+    #고정 시드에서 파이프라인이 결정론적인지 확인
     def test_pipeline_deterministic_with_fixed_seed(self):
         preds_first = self.model.predict(self.X)
         preds_second = self.model.predict(self.X)
