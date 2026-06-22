@@ -1,0 +1,24 @@
+# Python cache
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Logs and generated reports
+*.log
+inference.log
+drift_report.csv
+metric_timeseries.png
+confusion_matrix_*.csv
+
+# Local databases / generated model files
+mlflow.db
+best_model.pkl
+
+# Environment
+.venv/
+venv/
+.env
+
+# OS / editor
+.DS_Store
+.vscode/
